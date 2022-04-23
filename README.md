@@ -1,6 +1,6 @@
 ## My Documentation
 
-index.html
+[doc](index.html)
 
 ## Welcome to GitHub Pages
 
