@@ -25,6 +25,6 @@ jobs:
         run: |
           cd docs
           asciidoctor index.adoc
-          git add indesx.html
+          git add index.html
           git commit -a -m "gh-pages docs"
           git push
