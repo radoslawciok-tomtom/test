@@ -30,10 +30,10 @@ jobs:
         id: adocbuild
         uses: tonynv/asciidoctor-action@master
         with:
-            program: "asciidoctor -D docs --backend=html5 -o my_index.html docs/index.adoc"
-#      - name: Deploy docs to ghpages
-#        uses: peaceiris/actions-gh-pages@v3
-#        with:
-#          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-#          publish_branch: gh-pages
-#          publish_dir: ./
+            program: "asciidoctor -D docs --backend=html5 -o index.html docs/index.adoc"
+      - name: Deploy docs to ghpages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_branch: gh-pages
+          publish_dir: ./
