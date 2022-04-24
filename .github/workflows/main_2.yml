@@ -22,4 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build-doc
-        run: asciidoctor docs/index.adoc
+        run: |
+          cd docs
+          asciidoctor index.adoc
+          git add indesx.html
+          git commit -a -m "gh-pages docs"
+          git push
