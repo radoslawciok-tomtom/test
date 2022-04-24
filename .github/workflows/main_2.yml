@@ -25,8 +25,14 @@ jobs:
         run: |
           cd docs
           asciidoctor index.adoc
-          git config --global user.email "radoslaw.ciok@tomtom.com"
-          git config --global user.name "Radoslaw Ciok"
-          git add index.html
-          git commit -a -m "gh-pages docs"
-          git push
+#          git config --global user.email "radoslaw.ciok@tomtom.com"
+#          git config --global user.name "Radoslaw Ciok"
+#          git add index.html
+#          git commit -a -m "gh-pages docs"
+#          git push
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./build/docs/asciidoc
