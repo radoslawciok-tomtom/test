@@ -25,6 +25,8 @@ jobs:
         run: |
           cd docs
           asciidoctor index.adoc
+          git config --global user.email "radoslaw.ciok@tomtom.com"
+          git config --global user.name "Radoslaw Ciok"
           git add index.html
           git commit -a -m "gh-pages docs"
           git push
