@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="516px" preserveAspectRatio="none" style="width:1628px;height:516px;background:#FFFFFF;" version="1.1" viewBox="0 0 1628 516" width="1628px" zoomAndPan="magnify"><defs><filter height="300%" id="fl0polysefg4v" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FFFFFF" filter="url(#fl0polysefg4v)" height="134.1406" style="stroke:#000000;stroke-width:2.0;" width="543.5" x="892" y="201.9609"/><rect fill="#FFFFFF" height="43.9375" style="stroke:none;stroke-width:1.0;" width="543.5" x="892" y="248.2266"/><rect fill="#FFFFFF" height="43.9375" style="stroke:none;stroke-width:1.0;" width="543.5" x="892" y="292.1641"/><rect fill="#FFFFFF" filter="url(#fl0polysefg4v)" height="77.3984" style="stroke:#000000;stroke-width:2.0;" width="543" x="10" y="379.2344"/><rect fill="#FFFFFF" height="31.1328" style="stroke:none;stroke-width:1.0;" width="543" x="10" y="425.5"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="49" x2="49" y1="40.2969" y2="473.6328"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="424" x2="424" y1="40.2969" y2="473.6328"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="947" x2="947" y1="40.2969" y2="473.6328"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="1379.5" x2="1379.5" y1="40.2969" y2="473.6328"/><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="55" x="20" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="27" y="24.9951">Client</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="55" x="20" y="472.6328"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="27" y="492.6279">Client</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="233" x="306" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="219" x="313" y="24.9951">DefaultGoogleMapsTileService</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="233" x="306" y="472.6328"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="219" x="313" y="492.6279">DefaultGoogleMapsTileService</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="87" x="902" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="909" y="24.9951">WebClient</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="87" x="902" y="472.6328"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="909" y="492.6279">WebClient</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="88" x="1333.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="1340.5" y="24.9951">GoogleApi</text><rect fill="#FEFECE" filter="url(#fl0polysefg4v)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="88" x="1333.5" y="472.6328"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74" x="1340.5" y="492.6279">GoogleApi</text><polygon fill="#A80036" points="412.5,67.4297,422.5,71.4297,412.5,75.4297,416.5,71.4297" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="49.5" x2="418.5" y1="71.4297" y2="71.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="351" x="56.5" y="66.3638">getTile(tileCoordinates, ifNoneMatch, [sessionToken])</text><polygon fill="#A80036" points="935.5,96.5625,945.5,100.5625,935.5,104.5625,939.5,100.5625" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="424.5" x2="941.5" y1="100.5625" y2="100.5625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="499" x="431.5" y="95.4966">Make http request to google: GET /tiles with: tileCoordinates, [sessionToken]</text><polygon fill="#A80036" points="1367.5,125.6953,1377.5,129.6953,1367.5,133.6953,1371.5,129.6953" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="947.5" x2="1373.5" y1="129.6953" y2="129.6953"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96" x="954.5" y="124.6294">request for tile</text><line style="stroke:#A80036;stroke-width:1.0;" x1="1379.5" x2="1421.5" y1="173.9609" y2="173.9609"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1421.5" x2="1421.5" y1="173.9609" y2="186.9609"/><line style="stroke:#A80036;stroke-width:1.0;" x1="1380.5" x2="1421.5" y1="186.9609" y2="186.9609"/><polygon fill="#A80036" points="1390.5,182.9609,1380.5,186.9609,1390.5,190.9609,1386.5,186.9609" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="235" x="1386.5" y="153.7622">checks if tile was already requested</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="213" x="1386.5" y="168.895">and if it was modified since then</text><path d="M892,201.9609 L956,201.9609 L956,208.9609 L946,218.9609 L892,218.9609 L892,201.9609 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="134.1406" style="stroke:#000000;stroke-width:2.0;" width="543.5" x="892" y="201.9609"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="907" y="215.0278">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="235" x="971" y="214.1714">[Tile was modified since last request]</text><polygon fill="#A80036" points="958.5,236.2266,948.5,240.2266,958.5,244.2266,954.5,240.2266" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="952.5" x2="1378.5" y1="240.2266" y2="240.2266"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="408" x="964.5" y="235.1606">New or modified tile resource, status_code = 200, status = OK</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="892" x2="1435.5" y1="249.2266" y2="249.2266"/><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="260" x="897" y="259.437">[Tile was not modified since last request]</text><polygon fill="#A80036" points="958.5,280.1641,948.5,284.1641,958.5,288.1641,954.5,284.1641" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="952.5" x2="1378.5" y1="284.1641" y2="284.1641"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="303" x="964.5" y="279.0981">status_code = 304 - not modified, status = OK</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="892" x2="1435.5" y1="293.1641" y2="293.1641"/><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="261" x="897" y="303.3745">[Tile not found or service not accessable]</text><polygon fill="#A80036" points="958.5,324.1016,948.5,328.1016,958.5,332.1016,954.5,328.1016" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="952.5" x2="1378.5" y1="328.1016" y2="328.1016"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="329" x="964.5" y="323.0356">error: WebClientResponseException, status = NOK</text><polygon fill="#A80036" points="435.5,360.2344,425.5,364.2344,435.5,368.2344,431.5,364.2344" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="429.5" x2="946.5" y1="364.2344" y2="364.2344"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="135" x="441.5" y="359.1685">[Tile HTTP response]</text><path d="M10,379.2344 L74,379.2344 L74,386.2344 L64,396.2344 L10,396.2344 L10,379.2344 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="77.3984" style="stroke:#000000;stroke-width:2.0;" width="543" x="10" y="379.2344"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="25" y="392.3013">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="219" x="89" y="391.4448">[[Tile HTTP response] status = OK]</text><polygon fill="#A80036" points="60.5,413.5,50.5,417.5,60.5,421.5,56.5,417.5" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="54.5" x2="423.5" y1="417.5" y2="417.5"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="135" x="66.5" y="412.4341">[Tile HTTP response]</text><line style="stroke:#000000;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="10" x2="553" y1="426.5" y2="426.5"/><polygon fill="#A80036" points="60.5,444.6328,50.5,448.6328,60.5,452.6328,56.5,448.6328" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="54.5" x2="423.5" y1="448.6328" y2="448.6328"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="233" x="66.5" y="443.5669">error: WebClientResponseException</text><!--MD5=[8d35e0764d59a6c74a79cd6e632def02]
+@startuml
+'https://plantuml.com/sequence-diagram
+
+!$sessionToken = "[sessionToken]"
+!$tile_http_resp = "[Tile HTTP response]"
+
+Client -> DefaultGoogleMapsTileService: getTile(tileCoordinates, ifNoneMatch, $sessionToken)
+
+DefaultGoogleMapsTileService -> WebClient: Make http request to google: GET /tiles with: tileCoordinates, $sessionToken
+
+WebClient -> GoogleApi: request for tile
+
+GoogleApi -> GoogleApi: checks if tile was already requested\nand if it was modified since then
+
+alt Tile was modified since last request
+    GoogleApi - -> WebClient: New or modified tile resource, status_code = 200, status = OK
+else Tile was not modified since last request
+    GoogleApi - -> WebClient: status_code = 304 - not modified, status = OK
+else Tile not found or service not accessable
+    GoogleApi - -> WebClient: error: WebClientResponseException, status = NOK
+end
+
+WebClient - -> DefaultGoogleMapsTileService: $tile_http_resp
+
+alt $tile_http_resp status = OK
+    DefaultGoogleMapsTileService - -> Client: $tile_http_resp
+else
+    DefaultGoogleMapsTileService - -> Client: error: WebClientResponseException
+end
+
+@enduml
+
+@startuml
+
+
+Client -> DefaultGoogleMapsTileService: getTile(tileCoordinates, ifNoneMatch, [sessionToken])
+
+DefaultGoogleMapsTileService -> WebClient: Make http request to google: GET /tiles with: tileCoordinates, [sessionToken]
+
+WebClient -> GoogleApi: request for tile
+
+GoogleApi -> GoogleApi: checks if tile was already requested\nand if it was modified since then
+
+alt Tile was modified since last request
+    GoogleApi - -> WebClient: New or modified tile resource, status_code = 200, status = OK
+else Tile was not modified since last request
+    GoogleApi - -> WebClient: status_code = 304 - not modified, status = OK
+else Tile not found or service not accessable
+    GoogleApi - -> WebClient: error: WebClientResponseException, status = NOK
+end
+
+WebClient - -> DefaultGoogleMapsTileService: [Tile HTTP response]
+
+alt [Tile HTTP response] status = OK
+    DefaultGoogleMapsTileService - -> Client: [Tile HTTP response]
+else
+    DefaultGoogleMapsTileService - -> Client: error: WebClientResponseException
+end
+
+@enduml
+
+PlantUML version 1.2022.1(Tue Feb 01 19:19:58 CET 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+!$sessionToken = "[sessionToken]"
+!$tile_http_resp = "[Tile HTTP response]"
+
+Client -> DefaultGoogleMapsTileService: getViewPortInfo(viewPort, ifNoneMatch, $sessionToken)
+DefaultGoogleMapsTileService -> WebClient: Make http request to google: GET /viewport with: geographic coordinates, $sessionToken, apiKey
+WebClient -> GoogleApi: request for tile
+
+GoogleApi -> GoogleApi: checks if tile was already requested\nand if it was modified since then
+
+alt Tile was modified since last request
+    GoogleApi --> WebClient: New or modified tile resource, status_code = 200, status = OK
+else Tile was not modified since last request
+    GoogleApi --> WebClient: status_code = 304 - not modified, status = OK
+else Tile not found or service not accessable
+    GoogleApi --> WebClient: error: WebClientResponseException, status = NOK
+end
+
+WebClient --> DefaultGoogleMapsTileService: $tile_http_resp
+
+alt $tile_http_resp status = OK
+    DefaultGoogleMapsTileService --> Client: $tile_http_resp
+else
+    DefaultGoogleMapsTileService --> Client: error: WebClientResponseException
+end
+
+
+@enduml

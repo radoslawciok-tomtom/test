@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI_2
+name: Publish docs as github pages
 
 # Controls when the workflow will run
 on:
@@ -22,17 +22,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build-doc
-        run: |
-          cd docs
-          asciidoctor index.adoc
-#          git config --global user.email "radoslaw.ciok@tomtom.com"
-#          git config --global user.name "Radoslaw Ciok"
-#          git add index.html
-#          git commit -a -m "gh-pages docs"
-#          git push
+        run: asciidoctor -o docs/index.html docs/SatelliteImageProxyServiceDetailedDesign.adoc
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.ACTIONS_TOKEN }}
-          publish_dir: ./
+        # if: ${{ github.ref == 'refs/heads/main' }}
+        # with:
+        #   github_token: ${{ secrets.GH_TOKEN }}
+        #   publish_dir: ./
+        github_token: ${{ secrets.GH_TOKEN }}
+        publish_dir: ./
