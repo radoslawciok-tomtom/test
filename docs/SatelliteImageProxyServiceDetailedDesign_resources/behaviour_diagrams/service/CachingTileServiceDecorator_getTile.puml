@@ -1,0 +1,71 @@
+@startuml CachingTileServiceDecorator.getTile
+
+!$tileMetadata  = "[tileMetadata]"
+!$EMPTY = "[EMPTY]"
+!$tileRequest = "[tileRequest]"
+!$tileMetadata = "[tileMetadata]"
+!$resp_304 = "[304 Not Modified]"
+!$copyright = "[copyright]"
+!$tile_http_resp = "[Tile HTTP response]"
+!$check_def_quality_level = "quality level in [tileRequest] is delault"
+
+Client -> CachingTileServiceDecorator: getTile($tileRequest)
+CachingTileServiceDecorator -> stream: getMetadata($tileRequest)
+stream -> CompressionHandler: isDefaultQualityLevel(qualityLevel)
+CompressionHandler --> stream: boolean
+
+alt stream not empty
+
+    alt $check_def_quality_level
+        stream --> CachingTileServiceDecorator: $EMPTY
+    else
+        stream -> TileCache: getMetadata(coordinates, format, mapProvider)
+        TileCache --> stream: $tileMetadata
+        stream --> CachingTileServiceDecorator: $tileMetadata
+    end
+
+
+    alt $tileMetadata not found in cache OR is expired
+        stream --> CachingTileServiceDecorator: $EMPTY
+    end
+
+    CachingTileServiceDecorator -> stream: getCached($tileRequest, $tileMetadata)
+    
+    alt ETags from $tileMetadata and $tileRequest are equal
+        stream --> CachingTileServiceDecorator: $resp_304
+    end
+    
+    alt $tileMetadata has no $copyright
+        stream -> SatelliteImageService:  getCopyright(viewPort, ifNoneMatch, language)
+        SatelliteImageService --> stream: $copyright
+        stream -> stream: merge($tileMetadata, language, $copyright) 
+    end
+    
+    stream -> TileCache: getTile(coordinates, format, String mapProvider)
+    TileCache --> stream: $tile_http_resp
+    stream -> CachingTileServiceDecorator: $tile_http_resp
+
+else stream returned $EMPTY at some point
+    CachingTileServiceDecorator -> stream: getFreshResponse($tileRequest)
+    stream -> Tileservice: getTile($tileRequest)
+    Tileservice --> stream: tileResponse: $tile_http_resp
+    stream -> stream: updateExpireTime($tile_http_resp, $tileRequest)
+    note right: If provided expiry time is after configured expiry time, then new expiry time header value is set in http response.
+    stream -> stream: cache($tileRequest), $tile_http_resp)
+    activate stream
+        alt $check_def_quality_level
+            stream -> TileCache: storeTile(coordinates, format, mapProvider,language, $tile_http_resp)
+        end
+        TileCache --> stream
+    deactivate stream
+    alt $tileRequest.ETag = $tile_http_resp.ETag
+        stream --> CachingTileServiceDecorator: $resp_304
+    else
+        stream -> CachingTileServiceDecorator: $tile_http_resp
+    end
+
+end
+
+CachingTileServiceDecorator --> Client: Mono<ResponseEntity<Resource>>
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Client -> GoogleSatelliteImageService: getTile
+GoogleSatelliteImageService -> SessionContextProvider: get google session token
+SessionContextProvider --> GoogleSatelliteImageService: token
+GoogleSatelliteImageService -> GoogleMapsTileService: getTile
+GoogleMapsTileService -> GoogleMapsTileService: call Google Api for tile
+GoogleMapsTileService --> GoogleSatelliteImageService: Google Api response = tile or error
+alt Google Api respond with tile (status = OK)
+    GoogleSatelliteImageService --> Client: tile
+else Google Api respond with error
+    alt tile not found (status_code = 404)
+        GoogleSatelliteImageService -> NoTileAreaService: cache not tile area
+    end
+    GoogleSatelliteImageService -> ExceptionUtils: map error from Google api to SipException
+    ExceptionUtils --> GoogleSatelliteImageService: sipException
+    GoogleSatelliteImageService --> Client: sipException
+end
+
+@enduml

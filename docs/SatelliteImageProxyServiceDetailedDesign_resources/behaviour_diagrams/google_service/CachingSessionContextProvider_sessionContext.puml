@@ -1,0 +1,27 @@
+
+@startuml CachingSessionContextProvider.sessionContext
+
+title sessionContext()
+
+Client -> CachingSessionContextProvider: sessionContext(String language, String format)
+CachingSessionContextProvider -> CachingSessionContextProvider: run function to authorize with session key
+alt function thrown error other then: session key 'invalid' or 'expired'
+    CachingSessionContextProvider --> Client: throw WebClientResponseException
+end
+
+CachingSessionContextProvider -> Cache: try to get session token from 1st level cache
+Cache --> CachingSessionContextProvider: token or null
+alt if token found
+    CachingSessionContextProvider --> Client: SessionContext with token from cache
+else
+    CachingSessionContextProvider -> SecondLevelCache: get session token from 2st level cache
+    SecondLevelCache --> CachingSessionContextProvider: token or null
+    CachingSessionContextProvider --> Client: SessionContext with token from cache
+end
+
+CachingSessionContextProvider --> CachingSessionContextProvider: Token wasn't found in cache
+
+CachingSessionContextProvider -> GoogleMapsTileService: Get new token from Google Api.
+                                                        note right: Retries if http call fails.\nNumber of retries is defined in app configuration
+
+@enduml

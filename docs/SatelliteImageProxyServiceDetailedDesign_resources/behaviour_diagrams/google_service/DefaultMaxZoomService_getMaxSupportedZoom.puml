@@ -1,0 +1,22 @@
+@startuml
+
+!$tileCoordinates = "[tileCoordinates]"
+!$maxSupportedZoom = "[maxSupportedZoom]"
+!$EMPTY = "[EMPTY]"
+
+Client -> DefaultMaxZoomService: getMaxSupportedZoom($tileCoordinates)
+
+alt $tileCoordinates.zoom > <max supported zoom>
+    DefaultMaxZoomService --> DefaultMaxZoomService: Sets empty $EMPTY
+
+else max supported zoom is not defined for region in $tileCoordinates
+    DefaultMaxZoomService --> DefaultMaxZoomService: Sets empty $EMPTY
+
+else
+    DefaultMaxZoomService -> DefaultMaxZoomService: Finds $maxSupportedZoom from preloaded list for $tileCoordinates
+    DefaultMaxZoomService --> Client: $maxSupportedZoom
+else Stream is $EMPTY
+    DefaultMaxZoomService --> Client: $maxSupportedZoom
+end
+
+@enduml

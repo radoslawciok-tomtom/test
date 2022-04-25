@@ -1,0 +1,132 @@
+// Copyright (c) 2021 - 2021 TomTom N.V. All rights reserved.
+//
+// This software is the proprietary copyright of TomTom N.V. and its subsidiaries and may be
+// used for internal evaluation purposes or commercial use strictly subject to separate
+// licensee agreement between you and TomTom. If you are the licensee, you are only permitted
+// to use this Software in accordance with the terms of your license agreement. If you are
+// not the licensee, then you are not authorized to use this software in any manner and should
+// immediately return it to TomTom N.V.
+
+
+:toc: left
+
+= Satellite Image Proxy Service Detailed Design
+
+*Authors and Contributors*
+
+- https://github.com/jijucyriacmanjooran-tomtom[Jiju Cyriac Manjooran]
+- https://github.com/radoslawciok-tomtom[Radoslaw Ciok]
+
+*Document history*
+
+|===
+|Version |Date |Author | Change
+
+| 0.1
+| 17 Nov 2020
+| https://github.com/jijucyriacmanjooran-tomtom[Jiju Cyriac Manjooran]
+| Document released
+
+| 1.0
+| 25 Jan 2021
+|
+| Adaptation to link:https://confluence.tomtomgroup.com/display/HCP3/Detailed+Design+review+guidelines[Detailed Design review guidelines]
+
+| 1.1
+| 25 Feb 2021
+| https://github.com/jijucyriacmanjooran-tomtom[Jiju Cyriac Manjooran]
+| Resilience to communication failures with cosmosdb
+
+|===
+
+*Review status*
+
+Review status
+
+|===
+| Reviewer | Approved | Needs work
+
+| https://confluence.tomtomgroup.com/display/~fyukova[Alexander Fyukov]
+| &#10003;
+|
+
+| https://confluence.tomtomgroup.com/display/~klecha[Marcin Klecha]
+| &#10003;
+|
+
+| https://confluence.tomtomgroup.com/display/~lheres[Louwe Heres]
+| &#10003;
+|
+
+| https://confluence.tomtomgroup.com/display/~manjoora[Jiju Cyriac Manjooran]
+| &#10003;
+|
+
+|===
+
+== Introduction
+
+=== Name
+Satellite Image Proxy
+
+=== Component Type
+Java web application / rest service.
+
+=== Purpose and function
+Provide satellite map images and copyright information about them via REST API.
+
+Retrieve satellite images from Google (or other map provider), compress and cache them in order to:
+
+save on bandwidth by stronger compression
+improve the responsiveness and save on Google API usage by caching and reusing the compressed image tiles over multiple vehicles
+
+=== Requirements
+SIP has to:
+
+support different map providers based on region
+support caching the Google sessions
+support caching the tile images
+support compression (jpeg, astc, etc.)
+support mocking google tile api for unit testing bad weather scenarios
+
+== Design assumptions
+
+- Google API key is valid indefinitely and won't change on regular basis
+- tile images and copyright information can be cached in service for the period returned in "Cache-Control" headers
+
+== Design decisions
+
+This section can be found in https://confluence.tomtomgroup.com/x/XMRKN[Confluence].
+
+include::DesignSIP.adoc[]
+
+== Verification and validation
+
+No special verification and validation requirements apply to this service.
+
+Please refer to top level Test section
+
+=== Unit tests
+link:https://github.com/tomtom-internal/hcp3-sip/tree/master/src/test/java/com/tomtom/puas/sip[]
+
+=== Integration and qualification tests (Xray)
+https://jira.tomtomgroup.com/issues/?jql=project%20%3D%20HCP3%20AND%20issuetype%20%3D%20Test%20AND%20key%20in%20linkedIssues(%22HCP3-89%22)%20and%20%22Test%20Level%22%20%3D%20%22Integration%20Test%22[Integration tests JIRA]
+
+https://jira.tomtomgroup.com/issues/?jql=project%20%3D%20HCP3%20AND%20issuetype%20%3D%20Test%20AND%20key%20in%20linkedIssues(%22HCP3-89%22)%20and%20%22Test%20Level%22%20%3D%20%22Qualification%20test%22[Qualification tests JIRA]
+
+=== Running automated tests
+Test environment setup and testing procedure is described in link:https://github.com/tomtom-internal/hcp3-sip/blob/master/tests/README.md[README file in the source code repository].
+
+
+== Terminology and abbreviations
+
+* max-zoom - maximum zoom level that has satellite tile image available for given area; this value is returned to client in header of HTTP 404 response (see https://confluence.tomtomgroup.com/x/ccVKN[Max Zoom header in 404 response])
+* no-tile-area - area that does not contain tiles for given zoom level; areas are calculated preemptively to efficiently respond with most accurate max-zoom value (see No-tile Areas section in xref:https://confluence.tomtomgroup.com/x/ccVKN[Max Zoom header in 404 response])
+* quality level - value defining what should be JPEG quality of returned tiles; if map provider gives greater quality, SIP is re-compressing image to defined value (see https://confluence.tomtomgroup.com/x/EL5KN[Image Compression - JPEG])
+* SIP - Satellite Image Proxy
+* tile - a single satellite map image
+* tile coordinates - set of 3 integers (x, y and zoom) that describes tile location on the map of the world; more info can be found in link:https://developers.google.com/maps/documentation/javascript/coordinates#tile-coordinates[Google API documentation]
+
+== References
+
+Google Maps Tile API link:https://developers.google.com/maps/documentation/tile[]

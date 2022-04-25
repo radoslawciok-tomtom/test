@@ -1,0 +1,366 @@
+// Copyright (c) 2021 - 2021 TomTom N.V. All rights reserved.
+//
+// This software is the proprietary copyright of TomTom N.V. and its subsidiaries and may be
+// used for internal evaluation purposes or commercial use strictly subject to separate
+// licensee agreement between you and TomTom. If you are the licensee, you are only permitted
+// to use this Software in accordance with the terms of your license agreement. If you are
+// not the licensee, then you are not authorized to use this software in any manner and should
+// immediately return it to TomTom N.V.
+
+:resources: SatelliteImageProxyServiceDetailedDesign_resources
+:toc: left
+
+== Design
+
+This document considers Satellite Image Proxy (SIP) service as software component and java classes as software unit.
+
+=== Context dependencies and resources
+
+image:{resources}/DesignSIP_resources/sip-context.drawio.svg[] +
+_High level software components design_
+
+=== Interfaces
+Only interface exposed by the service is the REST API, see link:https://confluence.tomtomgroup.com/x/5aFKN[Satellite Image Proxy Service - API Specification]
+
+=== Design limitations
+
+Currently, SIP is a single java application. As a future improvement SIP will be decomposed to smaller components, which will run independently deployed from each other and communicate over http protocol. SIP will be divided to components with respect to responsibilities of each component. This improvement is planned to improve overall service performance. Now different SIP modules have very different memory and CPU usage.
+
+image:{resources}/SIP_decomposition.svg[]
+
+_SIP decomposition to smaller components_
+
+=== Design overview
+==== Component level design
+This diagram shows how SIP component communicates with external services and resources.
+
+image:{resources}/DesignSIP_resources/SIP-container-diagram.drawio.svg[] +
+_Component level design_
+
+==== Conceptual design
+This diagram shows conceptual division of SIP application into modules.
+
+image:{resources}/DesignSIP_resources/sip-resilience-component-diagram.drawio.svg[] +
+_SIP Conceptual design_
+
+==== Flow design
+This section presents detail flow design of most important SIP functionalities.
+
+===== SIP request flow
+image:{resources}/DesignSIP_resources/sip-image-request-flow.drawio.svg[] +
+_Overall SIP requests flow diagram._
+
+Following decisions where made during design:
+
+* automatic expiration of records in Redis is based on Cache-Control header of Google's response
+** Redis size is crucial factor for cost of the solution, we should not keep records (especially images which take up much more space) longer than they are useful
+* asynchronous saving images and metadata to cache
+** we want to serve client with image as fast as possible, therefore we can store images and metadata in background thread
+* no synchronization of image fetching
+** there might be situation when there are two request for the same tile (same x, y, zoom parameters) and that tile is not available in cache (either never downloaded or expired)
+** we allow both requests to download the file on their own and race to save data in Redis
+** adding synchronization (i.e. assuring only one request at a time is downloading particular map tile) would increase complexity of the solution, add extra latency (locking, polling) and might severely impact service performance in case of thread/instance failure before unlocking the resource
+
+===== Google session management [[google-session-management]]
+
+SIP uses google session tokens to get data from google api. Any request for tails or copyrights requires providing valid session token to get data.
+Session tokens from google are valid for 15 days, but SIP renew them 1 day before to be sure that application will not try to request google data with invalid token.
+
+SIP uses 2 levels of cache to store tokens:
+* 1'st level - internal application instance cache - first place to lookup for valid token
+* 2'nd level - Redis - deployed as Azure service, shared by all application instances.
+Get google token for requesting data for Google.
+
+image:{resources}/DesignSIP_resources/SipCacheDiagram.drawio.svg[] +
+_Google session management flow_
+
+Chosen job updating tokens cl to expiration date.
+Sip has cron job running every day. 
+It is checking how long google session tokens stored in 2'nd level cache will still be valid.
+If some token will expire in less than 24 hours, then it is re-new and updated in 1'st and 2'nd level cache.
+
+image:{resources}/DesignSIP_resources/CronJobDiagram.drawio.svg[] +
+_Google sessions cache update flow_
+
+===== Resilience
+SIP uses Resilience4j library to control requests load to external services - Redis, Google. Load to those services is driven by errors. When error is thrown during communication to these services, request sending is stopped for given time.
+
+image:{resources}/DesignSIP_resources/sip-components-diagram.drawio.svg[] +
+_Resiliency in SIP service_
+
+* Time limiter will prevent Redis requests from taking too long (>500ms) in case of communication failures.
+* Circuit breaker will prevent too many background requests choking sip in case of communication failures
+** Circuit breaker goes into OPEN state if 5 out of last 10 requests fail
+** Circuit breaker remains in OPEN state for 30 secs (no more requests to Redis are allowed)
+** After 30 secs, one request to Redis is allowed which will determine whether to switch to CLOSED or remain OPEN
+* If request times out or if Circuit breaker is OPEN, then SIP will serve images from google.
+* the liveness endpoint includes the state of the circuit breaker (ie, liveness=DOWN when Circuit breaker=OPEN)
+* Kubernetes will restart the node if liveness is DOWN for 90 secs
+
+===== Max Zoom Header in Tile Not-Found Responses
+image:{resources}/DesignSIP_resources/sip-tilenotfound-with-maxzoomheader.svg[] +
+_Max Zoom Header in Tile Not-Found Responses_
+
+* MaxZoomRects : Google viewport response includes a list of rectangles with max zoom for each. This information is less accurate (always >= 19) but can be prefetched.
+* NoTileAreas: Tiles are missing even at Google suggested max zoom levels and lower. We can know of them only when we try to get tiles in those areas. This information is very accurate but can only be built over time.
+* In case of tile-not-found for zoom beyond google-suggested-zoom, we respond with 404 + maxZoom based on MaxZoomRects.
+* In case of tile-not-found for zoom within google-suggested-zoom and tile is still missing, then
+** for first request we return just 404, and asynchronously find/save NoTileArea.
+** for subsequent requests (for even any coordinates within the same No-Tile-Area), we respond with 404 + accurate maxZoom based on NoTileAreas.
+
+==== Detailed structural design
+
+This document will consider  java classes as software units. Below diagram present structure of main classes which application is composed of.
+
+image:{resources}/SatelliteImageProxyImpl_structure.svg[] +
+
+_Structural diagram of main Sip classes_
+
+
+Com.tomtom.puas.sip.*SatelliteImageProxyImpl* -
+Main class which is input of application. Methods of the class handles rest endpoint requests.
+
+Com.tomtom.puas.sip.components.cache.inmemory.*InMemorySecondLevelCache* -
+Data access class for Google session stored in in-memory cache
+
+Com.tomtom.puas.sip.components.cache.redis.*SecondLevelCacheImpl* -
+Data access class for Google session stored in external application cache. Wrapper for session access repository.
+
+Com.tomtom.puas.sip.components.cache.redis.*RedisSessionRepository* -
+Data access class for Google session stored in external application cache. Class access data directly from cache.
+
+Com.tomtom.puas.sip.components.google.utils.*TileCoordinatesUtils* -
+Helper class for operation made on tile coordinates
+
+Com.tomtom.puas.sip.components.cache.inmemory.*InMemoryTileImageRepository* -
+Data access class for tiles stored in in-memory cache
+
+Com.tomtom.puas.sip.components.cache.inmemory.*InMemoryTileMetadataRepository* -
+Data access class for metadata stored in in-memory cache
+
+Com.tomtom.puas.sip.components.cache.redis.*RedisTileImageRepository* -
+Data access class for tiles stored in external cache
+
+Com.tomtom.puas.sip.components.cache.redis.*RedisTileMetadataRepository* -
+Data access class for metadata stored in external cache
+
+Com.tomtom.puas.sip.components.google.service.impl.*DefaultNoTileAreaService* -
+Class contains logic related with no tile areas
+
+Com.tomtom.puas.sip.components.cache.redis.*RedisNoTileAreaRepository* -
+Data access class for no tile area stored in external cache
+
+Com.tomtom.puas.sip.monitoring.*TracingIdFilter* -
+Filter for enhance response with traceId for logging purposes
+
+Com.tomtom.puas.sip.components.google.utils.*ExceptionUtils* -
+Exception helper class.
+
+Com.tomtom.puas.sip.model.*CacheControlDetails* -
+Class encapsulates metadata related to cache entries.
+
+Com.tomtom.puas.sip.model.*NoTileAreaCoordinates* -
+Model class containing coordinates on not tile area.
+
+Com.tomtom.puas.sip.components.cache.inmemory.*InMemoryNoTileAreaRepository* -
+Data access class for no tile area stored in in-memory cache
+
+Com.tomtom.puas.sip.components.google.service.impl.*DefaultGoogleMapsTileService* -
+Logic for getting data from google rest service.
+
+Com.tomtom.puas.sip.exception.*RestExceptionHandler* -
+Global handler for application exceptions.
+
+Com.tomtom.puas.sip.components.google.service.impl.*DefaultMaxZoomService* -
+Service for calculating max available zoom for a tile.
+
+Com.tomtom.puas.sip.components.google.service.impl.*CachingSessionContextProvider* -
+Create google session context for request sending to google api.
+
+Com.tomtom.puas.sip.components.cache.cronjobs.*SessionTokenUpdateCronjob* -
+Cronjob class executing scheduled tasks periodically.
+
+Com.tomtom.puas.sip.components.google.service.impl.*GoogleSatelliteImageService* -
+Provides methods to retrieve satellite image tiles.
+
+Com.tomtom.puas.sip.components.compression.impl.*JpegCompressionService* - responsible for compression tile images.
+
+include::BehavioralDesign.adoc[]
+
+=== Dynamic Behavior
+
+SIP service runs cron job which is independent process from serving responses to the client. Cron job is responsible for refreshing Google session tokens stored in Redis cache. Job runs every 24 hours. For more information see xref:google-session-management[Google session management] section.
+
+=== Non-functional attributes
+
+*SonarQube and code quality*
+
+- Coding standard violation analysis is provided with SonarQube. It is integrated to pipeline and run for every merge to master branch.
+Results: https://sonar.ad.tomtomgroup.com/dashboard?id=hcp3-sip[SonarQube] +
+https://jira.tomtomgroup.com/browse/HCP3-1580[HCP3-1580] - Software needs to be analyzed for coding standard violations
+
+Following coding guidelines should be followed during development: https://confluence.tomtomgroup.com/display/NAV/NavKit2+Java+style+guide[Coding Guidelines]
+
+*BlackDuck*
+
+- Security vulnerabilities are provided with https://hub.tomtomgroup.com/[BlackDuck].
+Results: 
+https://jira.tomtomgroup.com/browse/HCP3-1579[HCP3-1579] - Software needs to be analysed for security vulnerabilities
+
+*KPI*
+
+Please see link:https://confluence.tomtomgroup.com/x/u0zjMg[Services KPIs] and link:https://confluence.tomtomgroup.com/x/716bMQ[Product KPIs] pages for other non-functional requirements.
+
+=== Error handling
+
+When SIP encounter error during request processing, it returns proper response to the client. Error response contains:
+
+* http status according http protocol specification to  e.g.: "404 Not Found"
+* response body, which contains: "errorCode" and "message", e.g.:
++
+```
+{
+    "errorCode":30003,
+    "message":"invalid - Invalid Value"
+}
+```
+_errorCode_ is set by SIP to specify root cause of error situation. See table below for mapping between http statuses and SIP status codes. +
+_message_ is a short text description of root cause.
+
+==== Handling errors from google
+Based on errors defined in the link:https://developers.google.com/maps/documentation/tile#error_reasons[Google tile documentation]
+
+[%header,cols=4*] 
+|===
+
+| Error response from google | Action taken / SIP Response | Error code | Reasoning
+
+|Any other undocumented errors or invalid data	
+|500 (internal server error)	
+|30005
+|	
+
+|authTokenExpired: Your session token has expired.
+|retry once with a newly created session. 
+
+if even that fails, then 429 (RetryLater)
+|AuthToken Expired: 40003
+| We cache the sessions and evict them based on their expiry time.
+
+So we should not get this error. But in case we get it, we create a new session and try again (once). 
+
+But if even the retry fails, then this could be a temporary issue in the Google server, so return 429.
+
+| Connection/read timeout	
+| 429 (RetryLater)
+| 50001
+| Google API is unreachable
+
+| invalid: this is not documented in google tile documentation. but during testing, observed that we get this error reason when providing out of range x, y, or invalid format.	
+| 404 (not found)	
+| 30003
+| 
+
+| invalidCredentials: The session URL parameter is not a valid value. Generate new session	
+| 500 (internal server error)	
+| Invalid Credentials: 40002
+|
+
+|notFound: Your x, y, or z values are out of range:	
+|404 (not found)
+|30003
+|
+
+|quotaExceeded and rateLimitExceeded: Your application has exceeded its allowed quota or queries per second.	
+| 429 (RetryLater)
+|Quota Exceeded:  40005
+RateLimit Exceeded: 40006
+|
+
+| *required:* Your request is missing a URL parameter. 
+
+*badRequest:* Your request was not formed correctly.
+
+| 429 (RetryLater)
+| Invalid Request: 40004
+
+BadRequest: 40001
+
+| We don't add/remove url parameters on the fly.
+
+We have a fixed url template with typed parameters. So no chance of invalid data types. 
+
+Once we have it working (which we already have), we should never get this error. If at all we get this, then this could be a temporary issue in the Google server. So return 429.
+
+|===
+
+NOTE: If we respond with a 429/500, then further requests should be limited using a circuit breaker with exponential backoff (yet to be implemented)
+
+NOTE: Right now, specific error codes are returned from sip to api client. Although it doesn't bring anything to the client, we are going to use this specific error codes and messages for debugging purposes.General
+
+==== Error Codes mapping
+
+Http error codes are more general than SIP statuses, that's why single http status match multiple SIP error codes. Below table presents this relation.
+
+[%header,cols=3*]
+|===
+| HTTP Status | Error code | Reasoning / Possible cause
+
+.7+| 404 (Not Found)
+ 
+| 30001
+| Format not supported (Any other format than Jpeg is not supported)
+
+| 30002	
+| Invalid Compression Factor
+
+| 30002	
+| Invalid Compression Factor
+
+| 30003	
+| Values out of range (ex: zoom/x-coord/y-coord )
+
+| 30004	
+| Region not Supported
+
+| 30006	
+| Version not supported
+
+| 40007	
+| Unsupported image format received from tile provider
+
+| 400 (BadRequest)	
+| 40004	
+|
+* malformed syntax
+
+* the incorrect type of parameter (in a header, path, or body)
+
+* missing mandatory query parameter
+
+.2+| 500 (internal server error)
+
+| 40002
+| Invalid Credentials
+
+| 30005
+| Error from Google: Unknown or non reason / missing response body
+
+.5+| 429 (RetryLater)
+
+| 50001
+| Google API is unreachable
+
+| 40005
+| Quota Exceeded
+
+| 40006
+| RateLimit Exceeded
+
+| 40004
+| Invalid Request
+
+| 40001
+| BadRequest
+
+|===

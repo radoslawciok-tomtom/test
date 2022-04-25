@@ -1,0 +1,665 @@
+@startuml
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+
+   BasicTileService457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BasicTileService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   compressionHandler: CompressionHandler [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildCacheControl(tileResponse: ResponseEntity&lt;Resource&gt;, copyrightResponse: ResponseEntity&lt;Copyright&gt;): CacheControlDetails</TD></TR>
+<TR><TD ALIGN="LEFT" >- compress(tileRequest: TileRequest, response: ResponseEntity&lt;Resource&gt;): ResponseEntity&lt;Resource&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getCopyright(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Copyright&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getTileImage(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- mergeHeaders(tileResponse: ResponseEntity&lt;Resource&gt;, copyrightResponse: ResponseEntity&lt;Copyright&gt;): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >- mergeHeadersWithCopyright(tileResponse: ResponseEntity&lt;Resource&gt;, copyrightResponse: ResponseEntity&lt;Copyright&gt;): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >- mergeResponses(tuple: Tuple2&lt;ResponseEntity&lt;Resource&gt;, ResponseEntity&lt;Copyright&gt;&gt;): ResponseEntity&lt;Resource&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CachingSessionContextProvider1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CachingSessionContextProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cache: Cache&lt;SessionCacheKey, Session&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   secondLevelCache: SecondLevelCache [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileService: GoogleMapsTileService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- getSessionKey(language: String, format: String, forceRenew: boolean): Mono&lt;SessionKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleGoogleApiSessionCall(language: String, format: String, cacheKey: SessionCacheKey): Mono&lt;SessionKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sessionContext(language: String, format: String): SessionContext</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CachingTileServiceDecorator457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CachingTileServiceDecorator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   compressionHandler: CompressionHandler [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   service: TileService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileCache: TileCache [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- async(delayedOperation: Mono&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >- basicHeaders(response: ResponseEntity&lt;Resource&gt;): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >- cache(tileRequest: TileRequest, respose: ResponseEntity&lt;Resource&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >- extendedWithCopyright(metadata: TileMetadata, tileRequest: TileRequest): Mono&lt;TileMetadata&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getCached(tileRequest: TileRequest, metadata: TileMetadata): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getCopyright(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Copyright&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getFreshResponse(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getMetadata(tileRequest: TileRequest): Mono&lt;TileMetadata&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ merge(tileMetadata: TileMetadata, language: String, response: ResponseEntity&lt;Copyright&gt;): TileMetadata</TD></TR>
+<TR><TD ALIGN="LEFT" >- readImageFromCache(tileRequest: TileRequest, metadata: TileMetadata): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateExpireTime(response: ResponseEntity&lt;Resource&gt;, tileRequest: TileRequest): ResponseEntity&lt;Resource&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CompressionHandler1423694680[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CompressionHandler</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   compressionServices: List&lt;CompressionService&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   defaultQualityLevel: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- checkQualityLevel(qualityLevel: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ compress(format: String, qualityLevel: Integer, resource: Resource): Resource</TD></TR>
+<TR><TD ALIGN="LEFT" >- compressionService(format: String): CompressionService</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isDefaultQualityLevel(qualityLevel: Integer): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CopyrightHeaderEncodingTileServiceDecorator457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CopyrightHeaderEncodingTileServiceDecorator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   service: TileService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- encodeCopyright(headers: HttpHeaders): Optional&lt;HttpHeaders&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(tileRequest: TileRequest): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- updateResponse(response: ResponseEntity&lt;Resource&gt;, newHeaders: HttpHeaders): ResponseEntity&lt;Resource&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CopyrightService457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CopyrightService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getCopyright(viewPort: ViewPort, eTag: ETag, language: String, satelliteImageService: SatelliteImageService): Mono&lt;ResponseEntity&lt;Copyright&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DefaultGoogleMapsTileService1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultGoogleMapsTileService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   apiKey: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   httpClient: HttpClient [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   responseTimeout: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   serverRegion: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   webClient: WebClient [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildTileUri(tileCoordinates: TileCoordinates, sessionKey: SessionKey, uriBuilder: UriBuilder): URI</TD></TR>
+<TR><TD ALIGN="LEFT" >+ cleanUp()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createSession(language: String, format: String): Mono&lt;ResponseEntity&lt;Session&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ fallback(e: Exception): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getHttpHeaders(ifNoneMatch: String): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(tileCoordinates: TileCoordinates, ifNoneMatch: String, sessionKey: SessionKey): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getViewPortInfo(viewPort: ViewPort, ifNoneMatch: String, sessionKey: SessionKey): Mono&lt;ResponseEntity&lt;ViewPortInfo&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ tileExists(tileCoordinates: TileCoordinates, sessionKey: SessionKey): Mono&lt;Boolean&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DefaultMaxZoomService1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultMaxZoomService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   globalMaxZoom: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maxZoomRegions: AtomicReference&lt;List&lt;MaxZoomRegion&gt;&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   objectMapper: ObjectMapper [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   refreshInterval: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   retryInterval: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   scheduler: ScheduledExecutorService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   storePath: Path [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- findMaxZoomFromRegion(maxZoomRegion: MaxZoomRegion, tile: TileLatLngCoordinates): Integer</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMaxSupportedZoom(tileCoordinates: TileCoordinates): Mono&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getMaxZoom(tile: TileLatLngCoordinates): Mono&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- loadZoomRectangles(retries: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >- parseMaxZoomRectangles(filepath: Path): MaxZoomRectangle[]</TD></TR>
+<TR><TD ALIGN="LEFT" >- parseMaxZoomRegionFile(filepath: Path): Optional&lt;MaxZoomRegion&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DefaultNoTileAreaService1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultNoTileAreaService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   defaultLanguage: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   noTileAreaRepository: NoTileAreaRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sessionContextProvider: SessionContextProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileService: GoogleMapsTileService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ttl: long [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- addLowerZoomNoTileAreas(tileIterator: TileIterator, noTileAreaTileCoordinates: Tuple2&lt;TileCoordinates, TileCoordinates&gt;, format: String): Flux&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ cacheNoTileArea(tileCoordinates: TileCoordinates, format: String): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findCandidatesOnEast(tileIterator: TileIterator, sessionKey: SessionKey): Mono&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findCandidatesOnNorth(tileIterator: TileIterator, sessionKey: SessionKey): Mono&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findCandidatesOnSouth(tileIterator: TileIterator, sessionKey: SessionKey): Mono&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findCandidatesOnWest(tileIterator: TileIterator, sessionKey: SessionKey): Mono&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findLastNonAvailableCoordinates(tileIterator: TileIterator, sessionKey: SessionKey): Mono&lt;TileCoordinates&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findNoTileAreaTileCoordinates(tileIterator: TileIterator, format: String): Flux&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findNoTileAreas(tileCoordinates: TileCoordinates, format: String): Flux&lt;Tuple2&lt;TileCoordinates, TileCoordinates&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findNorthWestVertex(sourceCoord: TileCoordinates, vertexCandidates: VertexCandidates): Mono&lt;TileCoordinates&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findSouthEastVertex(sourceCoord: TileCoordinates, vertexCandidates: VertexCandidates): Mono&lt;TileCoordinates&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findVertex(sourceCoord: TileCoordinates, xCandidates: List&lt;Integer&gt;, yCandidates: List&lt;Integer&gt;): Mono&lt;TileCoordinates&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMaxSupportedZoom(tileCoordinates: TileCoordinates): Mono&lt;Integer&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GoogleConfiguration1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GoogleConfiguration</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   coordinateSystem: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   defaultFormat: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   defaultLanguage: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   globalMaxZoom: Integer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   projectionType: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   unsupportedRegions: List&lt;String&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): GoogleConfigurationBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" ># canEqual(other: Object): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GoogleSatelliteImageService1017290560[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GoogleSatelliteImageService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cachingEnabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   cachingTime: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   googleConfig: GoogleConfiguration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maxZoomService: Optional&lt;MaxZoomService&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   noTileAreaService: NoTileAreaService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   objectMapper: ObjectMapper [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sessionContextProvider: SessionContextProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileService: GoogleMapsTileService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- cacheNoTileAreaAsync(tileCoordinates: TileCoordinates, format: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- checkImageFormat(status: HttpStatus, body: Resource)</TD></TR>
+<TR><TD ALIGN="LEFT" >- copyRelevantHeaders(sourceHeaders: HttpHeaders): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCopyright(viewPort: ViewPort, ifNoneMatch: String, language: String): Mono&lt;ResponseEntity&lt;Copyright&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(tileCoordinates: TileCoordinates, ifNoneMatch: String, format: String): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- handleTileNotFound(tileCoordinates: TileCoordinates, format: String, e: NotFound): SipException</TD></TR>
+<TR><TD ALIGN="LEFT" >- isConnectionProblem(ex: Throwable): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- isImageHeaderValid(resource: Resource): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRegionSupported(region: String): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InMemoryCacheKey901246944[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InMemoryCacheKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   coordinates: TileCoordinates [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   format: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   provider: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># of(tileMetadata: TileMetadata): InMemoryCacheKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InMemoryNoTileAreaRepository901246944[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InMemoryNoTileAreaRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   noTileAreaStore: Cache&lt;Integer, Set&lt;NoTileAreaCoordinates&gt;&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- checkIfContain(areas: Set&lt;NoTileAreaCoordinates&gt;, tileCoordinates: TileCoordinates): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(northWest: TileCoordinates, southEast: TileCoordinates, ttl: long): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ findMinNotSupportedZoom(tileCoordinates: TileCoordinates): Mono&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- findMinNotSupportedZoom(tileCoordinates: TileCoordinates, zoom: Integer): Integer</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InMemorySecondLevelCache901246944[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InMemorySecondLevelCache</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(sessionCacheKey: SessionCacheKey): Mono&lt;Session&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(sessionCacheKey: SessionCacheKey, session: Session): Mono&lt;Session&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InMemoryTileImageRepository901246944[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InMemoryTileImageRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   imageStore: Cache&lt;InMemoryCacheKey, byte[]&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(coordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;Resource&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(coordinates: TileCoordinates, format: String, mapProvider: String, resource: Resource, ttl: Duration): Mono&lt;Void&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InMemoryTileMetadataRepository901246944[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InMemoryTileMetadataRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   metadataStore: Cache&lt;InMemoryCacheKey, TileMetadata&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(tileCoordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;TileMetadata&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(tileMetadata: TileMetadata): Mono&lt;Void&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+JpegCompressionService902228234[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)JpegCompressionService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compress(inputResource: Resource, qualityLevel: int): Resource</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isFormatSupported(format: String): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MaxZoomRectangle842642306[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MaxZoomRectangle</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   east: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   north: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   south: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   west: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoom: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># canEqual(other: Object): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ contains(tile: TileLatLngCoordinates): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MaxZoomRegion842642306[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MaxZoomRegion</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   east: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maxZoomRectangles: MaxZoomRectangle[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   north: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   south: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   west: double [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): MaxZoomRegionBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ contains(lat: double, lng: double): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MetadataService457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MetadataService</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMetadata(satelliteImageService: SatelliteImageService): Mono&lt;ResponseEntity&lt;Metadata&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NoTileAreaCoordinates1300245791[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)NoTileAreaCoordinates</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   east: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   north: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   south: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   west: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoom: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): NoTileAreaCoordinatesBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ contains(tileCoordinates: TileCoordinates): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(northWestCoordinates: TileCoordinates, southEastCoordinates: TileCoordinates): NoTileAreaCoordinates</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RedisNoTileAreaRepository511583743[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RedisNoTileAreaRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   addNoTileAreaScript: RedisScript&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   findLowestZoonNoTileAreaScript: RedisScript&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   maxNoTileAreaZoom: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   redisTemplate: ReactiveStringRedisTemplate [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(northWest: TileCoordinates, southEast: TileCoordinates, ttl: long): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># fallback(e: Exception): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ findMinNotSupportedZoom(tileCoordinates: TileCoordinates): Mono&lt;Integer&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RedisTileImageRepository511583743[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RedisTileImageRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   tileImageRedis: ReactiveRedisTemplate&lt;String, byte[]&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># fallback(e: Exception): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(coordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;Resource&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getBytes(resource: Resource): Mono&lt;byte[]&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(coordinates: TileCoordinates, format: String, mapProvider: String, resource: Resource, ttl: Duration): Mono&lt;Void&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RedisTileMetadataRepository511583743[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RedisTileMetadataRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   tileMetadataRedis: ReactiveRedisTemplate&lt;String, TileMetadata&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># fallback(e: Exception): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(tileCoordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;TileMetadata&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(tileMetadata: TileMetadata): Mono&lt;Void&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SatelliteImageProxyImpl671735708[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SatelliteImageProxyImpl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   apiVersion: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   copyrightService: CopyrightService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   metadataService: MetadataService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   satelliteImageServiceProvider: SatelliteImageServiceProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileServiceProvider: TileServiceProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- checkFormat(format: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- checkVersion(version: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getCopyright(version: String, north: Float, south: Float, east: Float, west: Float, zoom: Integer, ifNoneMatch: String, language: String, region: String, exchange: ServerWebExchange): Mono&lt;ResponseEntity&lt;Copyright&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMetadata(version: String, region: String, exchange: ServerWebExchange): Mono&lt;ResponseEntity&lt;Metadata&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(version: String, zoom: Integer, x: Integer, y: Integer, ifNoneMatch: String, format: String, region: String, qualityLevel: Integer, language: String, exchange: ServerWebExchange): Mono&lt;ResponseEntity&lt;Resource&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SatelliteImageServiceProvider457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SatelliteImageServiceProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   satelliteImageServices: Map&lt;String, SatelliteImageService&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMapProviderFor(region: String): SatelliteImageService</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SecondLevelCacheImpl511583743[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SecondLevelCacheImpl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   redisSessionRepository: RedisSessionRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(sessionCacheKey: SessionCacheKey): Mono&lt;Session&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(sessionCacheKey: SessionCacheKey, session: Session): Mono&lt;Session&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Session842642306[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Session</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   expiresAt: Instant [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   expiryEpochSecs: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ setExpiry(expiry: String): Session</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setKey(key: String): Session</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shouldRenew(sessionRenewDeadline: long): Boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SessionCacheKey842642306[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SessionCacheKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   format: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   language: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SipApiController1250053744[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SipApiController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   delegate: SipApiDelegate [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TileCache488574708[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TileCache</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   tileImageRepository: TileImageRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileMetadataRepository: TileMetadataRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMetadata(coordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;TileMetadata&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getTile(coordinates: TileCoordinates, format: String, mapProvider: String): Mono&lt;Resource&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ storeTile(coordinates: TileCoordinates, format: String, mapProvider: String, language: String, response: ResponseEntity&lt;Resource&gt;): Mono&lt;Void&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateMetadata(tileMetadata: TileMetadata): Mono&lt;Void&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TileMetadata1300245791[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TileMetadata</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cacheControlDetails: CacheControlDetails [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   coordinates: TileCoordinates [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   etag: ETag [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   format: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localizedCopyrights: Map&lt;String, String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mapProvider: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): TileMetadataBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ hasCopyright(language: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toBasicHttpHeaders(): HttpHeaders</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toBuilder(): TileMetadataBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toFullHttpHeaders(language: String): HttpHeaders</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+TileServiceProvider457921323[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)TileServiceProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cachingTileService: TileService [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   noCachingTileService: TileService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getTileService(mapService: SatelliteImageService): TileService</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+'edges    
+BasicTileService457921323 -> CompressionHandler1423694680[label="compressionHandler
+[0..1]"];
+CachingSessionContextProvider1017290560 -> InMemorySecondLevelCache901246944[arrowhead=none, arrowtail=empty, dir=both];
+CachingSessionContextProvider1017290560 -> SecondLevelCacheImpl511583743[arrowhead=none, arrowtail=empty, dir=both];
+CachingSessionContextProvider1017290560 -> Session842642306[label="cache
+[0..1]"];
+CachingSessionContextProvider1017290560 -> SessionCacheKey842642306[label="cache
+[0..1]"];
+CachingTileServiceDecorator457921323 -> CompressionHandler1423694680[label="compressionHandler
+[0..1]"];
+CachingTileServiceDecorator457921323 -> TileCache488574708[label="tileCache
+[0..1]"];
+CompressionHandler1423694680 -> JpegCompressionService902228234[arrowhead=none, arrowtail=empty, dir=both];
+DefaultMaxZoomService1017290560 -> MaxZoomRegion842642306[label="maxZoomRegions
+[0..1]"];
+DefaultNoTileAreaService1017290560 -> CachingSessionContextProvider1017290560[arrowhead=none, arrowtail=empty, dir=both];
+DefaultNoTileAreaService1017290560 -> DefaultGoogleMapsTileService1017290560[arrowhead=none, arrowtail=empty, dir=both];
+DefaultNoTileAreaService1017290560 -> InMemoryNoTileAreaRepository901246944[arrowhead=none, arrowtail=empty, dir=both];
+DefaultNoTileAreaService1017290560 -> RedisNoTileAreaRepository511583743[arrowhead=none, arrowtail=empty, dir=both];
+GoogleSatelliteImageService1017290560 -> DefaultMaxZoomService1017290560[arrowhead=none, arrowtail=empty, dir=both];
+GoogleSatelliteImageService1017290560 -> DefaultNoTileAreaService1017290560[arrowhead=none, arrowtail=empty, dir=both];
+GoogleSatelliteImageService1017290560 -> GoogleConfiguration1017290560[label="googleConfig
+[0..1]"];
+InMemoryNoTileAreaRepository901246944 -> NoTileAreaCoordinates1300245791[label="noTileAreaStore
+[0..1]"];
+InMemoryTileImageRepository901246944 -> InMemoryCacheKey901246944[label="imageStore
+[0..1]"];
+InMemoryTileMetadataRepository901246944 -> InMemoryCacheKey901246944[label="metadataStore
+[0..1]"];
+InMemoryTileMetadataRepository901246944 -> TileMetadata1300245791[label="metadataStore
+[0..1]"];
+MaxZoomRegion842642306 -> MaxZoomRectangle842642306[label="maxZoomRectangles
+[0..*]"];
+RedisTileMetadataRepository511583743 -> TileMetadata1300245791[label="tileMetadataRedis
+[0..1]"];
+SatelliteImageProxyImpl671735708 -> CopyrightService457921323[label="copyrightService
+[0..1]"];
+SatelliteImageProxyImpl671735708 -> MetadataService457921323[label="metadataService
+[0..1]"];
+SatelliteImageProxyImpl671735708 -> SatelliteImageServiceProvider457921323[label="satelliteImageServiceProvider
+[0..1]"];
+SatelliteImageProxyImpl671735708 -> TileServiceProvider457921323[label="tileServiceProvider
+[0..1]"];
+SatelliteImageServiceProvider457921323 -> GoogleSatelliteImageService1017290560[arrowhead=none, arrowtail=empty, dir=both];
+SipApiController1250053744 -> SatelliteImageProxyImpl671735708[label="delegate
+[0..1]"];
+TileCache488574708 -> InMemoryTileImageRepository901246944[arrowhead=none, arrowtail=empty, dir=both];
+TileCache488574708 -> InMemoryTileMetadataRepository901246944[arrowhead=none, arrowtail=empty, dir=both];
+TileCache488574708 -> RedisTileImageRepository511583743[arrowhead=none, arrowtail=empty, dir=both];
+TileCache488574708 -> RedisTileMetadataRepository511583743[arrowhead=none, arrowtail=empty, dir=both];
+TileServiceProvider457921323 -> BasicTileService457921323[arrowhead=none, arrowtail=empty, dir=both];
+TileServiceProvider457921323 -> CachingTileServiceDecorator457921323[arrowhead=none, arrowtail=empty, dir=both];
+TileServiceProvider457921323 -> CopyrightHeaderEncodingTileServiceDecorator457921323[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

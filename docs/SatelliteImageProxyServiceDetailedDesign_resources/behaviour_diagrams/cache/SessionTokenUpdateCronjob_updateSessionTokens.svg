@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="442px" preserveAspectRatio="none" style="width:838px;height:442px;background:#FFFFFF;" version="1.1" viewBox="0 0 838 442" width="838px" zoomAndPan="magnify"><defs><filter height="300%" id="fhruvf5ttw884" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#FFFFFF" filter="url(#fhruvf5ttw884)" height="223.9297" style="stroke:#000000;stroke-width:2.0;" width="755.5" x="69" y="144.6953"/><rect fill="#FFFFFF" filter="url(#fhruvf5ttw884)" height="192.7969" style="stroke:#000000;stroke-width:2.0;" width="735.5" x="79" y="168.8281"/><rect fill="#FFFFFF" filter="url(#fhruvf5ttw884)" height="103.3984" style="stroke:#000000;stroke-width:2.0;" width="715.5" x="89" y="251.2266"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="34" x2="34" y1="40.2969" y2="399.625"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="210" x2="210" y1="40.2969" y2="399.625"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="449.5" x2="449.5" y1="40.2969" y2="399.625"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="628.5" x2="628.5" y1="40.2969" y2="399.625"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;" x1="762.5" x2="762.5" y1="40.2969" y2="399.625"/><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="55" x="5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="12" y="24.9951">Client</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="55" x="5" y="398.625"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="12" y="418.6201">Client</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="219" x="99" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="205" x="106" y="24.9951">SessionTokenUpdateCronjob</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="219" x="99" y="398.625"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="205" x="106" y="418.6201">SessionTokenUpdateCronjob</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="150" x="372.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="379.5" y="24.9951">SecondLevelCache</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="150" x="372.5" y="398.625"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="136" x="379.5" y="418.6201">SecondLevelCache</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="181" x="536.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="543.5" y="24.9951">GoogleMapsTileService</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="181" x="536.5" y="398.625"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167" x="543.5" y="418.6201">GoogleMapsTileService</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="59" x="731.5" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45" x="738.5" y="24.9951">Cache</text><rect fill="#FEFECE" filter="url(#fhruvf5ttw884)" height="30.2969" style="stroke:#A80036;stroke-width:1.5;" width="59" x="731.5" y="398.625"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45" x="738.5" y="418.6201">Cache</text><polygon fill="#A80036" points="198.5,67.4297,208.5,71.4297,198.5,75.4297,202.5,71.4297" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="34.5" x2="204.5" y1="71.4297" y2="71.4297"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="152" x="41.5" y="66.3638">updateSessionTokens()</text><polygon fill="#A80036" points="437.5,96.5625,447.5,100.5625,437.5,104.5625,441.5,100.5625" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="210.5" x2="443.5" y1="100.5625" y2="100.5625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="113" x="217.5" y="95.4966">getSessionKeys()</text><polygon fill="#A80036" points="221.5,125.6953,211.5,129.6953,221.5,133.6953,217.5,129.6953" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="215.5" x2="448.5" y1="129.6953" y2="129.6953"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="125" x="227.5" y="124.6294">list of session keys</text><path d="M69,144.6953 L145,144.6953 L145,151.6953 L135,161.6953 L69,161.6953 L69,144.6953 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="223.9297" style="stroke:#000000;stroke-width:2.0;" width="755.5" x="69" y="144.6953"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="31" x="84" y="157.7622">loop</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="168" x="160" y="156.9058">[for every [key] on the list]</text><path d="M79,168.8281 L143,168.8281 L143,175.8281 L133,185.8281 L79,185.8281 L79,168.8281 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="192.7969" style="stroke:#000000;stroke-width:2.0;" width="735.5" x="79" y="168.8281"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="94" y="181.895">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="343" x="158" y="181.0386">[[key] should be renewed - is close to expiriation date]</text><polygon fill="#A80036" points="617,203.0938,627,207.0938,617,211.0938,621,207.0938" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="210.5" x2="623" y1="207.0938" y2="207.0938"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="213" x="217.5" y="202.0278">createSession(language, format)</text><polygon fill="#A80036" points="221.5,232.2266,211.5,236.2266,221.5,240.2266,217.5,236.2266" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="215.5" x2="628" y1="236.2266" y2="236.2266"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62" x="227.5" y="231.1606">[newKey]</text><path d="M89,251.2266 L153,251.2266 L153,258.2266 L143,268.2266 L89,268.2266 L89,251.2266 " fill="#EEEEEE" style="stroke:#000000;stroke-width:1.0;"/><rect fill="none" height="103.3984" style="stroke:#000000;stroke-width:2.0;" width="715.5" x="89" y="251.2266"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="19" x="104" y="264.2935">alt</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="121" x="168" y="263.437">[[newKey] not null]</text><polygon fill="#A80036" points="751,285.4922,761,289.4922,751,293.4922,755,289.4922" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="210.5" x2="757" y1="289.4922" y2="289.4922"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="215" x="217.5" y="284.4263">put(sessionCacheKey, [newKey])</text><polygon fill="#A80036" points="221.5,299.4922,211.5,303.4922,221.5,307.4922,217.5,303.4922" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="215.5" x2="762" y1="303.4922" y2="303.4922"/><polygon fill="#A80036" points="437.5,328.625,447.5,332.625,437.5,336.625,441.5,332.625" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="210.5" x2="443.5" y1="332.625" y2="332.625"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="215" x="217.5" y="327.5591">put(sessionCacheKey, [newKey])</text><polygon fill="#A80036" points="221.5,342.625,211.5,346.625,221.5,350.625,217.5,346.625" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="215.5" x2="448.5" y1="346.625" y2="346.625"/><polygon fill="#A80036" points="45.5,377.625,35.5,381.625,45.5,385.625,41.5,381.625" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;" x1="39.5" x2="209.5" y1="381.625" y2="381.625"/><!--MD5=[04c438901c9a3feec29ff22f09af027b]
+@startuml
+
+!$newKey = "[newKey]"
+
+Client -> SessionTokenUpdateCronjob: updateSessionTokens()
+
+SessionTokenUpdateCronjob -> SecondLevelCache: getSessionKeys()
+SecondLevelCache - -> SessionTokenUpdateCronjob: list of session keys
+
+loop for every [key] on the list
+    alt [key] should be renewed - is close to expiriation date
+        SessionTokenUpdateCronjob -> GoogleMapsTileService: createSession(language, format)
+        GoogleMapsTileService - -> SessionTokenUpdateCronjob: $newKey
+        alt $newKey not null
+            SessionTokenUpdateCronjob -> Cache: put(sessionCacheKey, $newKey)
+            Cache - -> SessionTokenUpdateCronjob
+            SessionTokenUpdateCronjob -> SecondLevelCache: put(sessionCacheKey, $newKey)
+            SecondLevelCache - -> SessionTokenUpdateCronjob
+        end
+    end
+end
+
+SessionTokenUpdateCronjob - -> Client
+
+@enduml
+
+@startuml
+
+
+Client -> SessionTokenUpdateCronjob: updateSessionTokens()
+
+SessionTokenUpdateCronjob -> SecondLevelCache: getSessionKeys()
+SecondLevelCache - -> SessionTokenUpdateCronjob: list of session keys
+
+loop for every [key] on the list
+    alt [key] should be renewed - is close to expiriation date
+        SessionTokenUpdateCronjob -> GoogleMapsTileService: createSession(language, format)
+        GoogleMapsTileService - -> SessionTokenUpdateCronjob: [newKey]
+        alt [newKey] not null
+            SessionTokenUpdateCronjob -> Cache: put(sessionCacheKey, [newKey])
+            Cache - -> SessionTokenUpdateCronjob
+            SessionTokenUpdateCronjob -> SecondLevelCache: put(sessionCacheKey, [newKey])
+            SecondLevelCache - -> SessionTokenUpdateCronjob
+        end
+    end
+end
+
+SessionTokenUpdateCronjob - -> Client
+
+@enduml
+
+PlantUML version 1.2021.11(Sat Oct 02 15:26:11 CEST 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
